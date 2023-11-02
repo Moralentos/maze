@@ -12,9 +12,9 @@ int main()
 
     char matrix[][10] = {
     {'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X'},
-    {'X', 'O', 'X', 'O', 'O', 'O', 'O', 'O', 'O', 'X'},
+    {'X', 'O', 'X', 'P', 'O', 'O', 'O', 'O', 'O', 'X'},
     {'X', 'O', 'X', 'X', 'X', 'O', 'X', 'X', 'O', 'X'},
-    {'X', 'P', 'O', 'O', 'O', 'O', 'X', 'O', 'O', 'X'},
+    {'X', 'O', 'O', 'O', 'O', 'O', 'X', 'O', 'O', 'X'},
     {'X', 'O', 'X', 'O', 'X', 'O', 'X', 'O', 'X', 'X'},
     {'X', 'O', 'X', 'O', 'X', 'O', 'X', 'O', 'O', 'X'},
     {'X', 'O', 'X', 'O', 'X', 'O', 'X', 'X', 'O', 'X'},
@@ -34,6 +34,8 @@ int main()
 
     boolean firstRender = false;
     boolean isEscaped = false;
+
+    // ДОБАВИТЬ ПРОВЕРКУ НИЗ. НЕТ ПОВОРОТА НАПРАВО 
 
 
 
@@ -82,10 +84,10 @@ int main()
 
         // ИДЕТ ВНИЗ
         if (playerSide == side[2]) {
-            if (matrix[playerPosY][playerPosX - 1] != 'X') {// Проверка стены правой рукой
+            if (matrix[playerPosY][playerPosX - 1] == 'O') {// Проверка стены правой рукой
                 setfillstyle(SOLID_FILL, GREEN);
                 bar((playerPosX - 1) * rectWidth, (playerPosY + 1) * rectWidth, (playerPosX)*rectWidth, (playerPosY)*rectWidth);
-                if (matrix[playerPosY + 1][playerPosX] != 'X') { // Проверка стены впереди
+                if (matrix[playerPosY + 1][playerPosX] == 'O') { // Проверка стены впереди
                     setfillstyle(SOLID_FILL, LIGHTGRAY);
                     bar(playerPosX * rectWidth, (playerPosY + 1) * rectWidth, (playerPosX + 1) * rectWidth, (playerPosY + 2) * rectWidth);
                     matrix[playerPosY][playerPosX] = 'O';
@@ -93,10 +95,10 @@ int main()
                 }
                 else playerSide = side[1];
             }
-            else {
+            if (matrix[playerPosY][playerPosX - 1] == 'X') {
                 setfillstyle(SOLID_FILL, GREEN);
                 bar((playerPosX - 1) * rectWidth, (playerPosY + 1) * rectWidth, (playerPosX)*rectWidth, (playerPosY)*rectWidth);
-                if (matrix[playerPosY + 1][playerPosX] != 'X') { // Проверка стены впереди
+                if (matrix[playerPosY + 1][playerPosX] == 'O') { // Проверка стены впереди
                     setfillstyle(SOLID_FILL, LIGHTGRAY);
                     bar(playerPosX * rectWidth, (playerPosY + 1) * rectWidth, (playerPosX + 1) * rectWidth, (playerPosY + 2) * rectWidth);
                     matrix[playerPosY][playerPosX] = 'O';
@@ -109,27 +111,25 @@ int main()
         }
         // ИДЕТ НАЛЕВО
         if (playerSide == side[3]) {
-            if (matrix[playerPosY + 1][playerPosX] != 'X') { // Проверка стены правой рукой
+            if (matrix[playerPosY + 1][playerPosX] == 'O') { // Проверка стены правой рукой
                 setfillstyle(SOLID_FILL, LIGHTRED);
                 bar(playerPosX * rectWidth, (playerPosY + 1) * rectWidth, (playerPosX + 1) * rectWidth, (playerPosY + 2) * rectWidth);
-                if (matrix[playerPosY][playerPosX + 1] != 'X') {// Проверка стены впереди
-                    setfillstyle(SOLID_FILL, LIGHTGRAY);
-                    bar((playerPosX + 2) * rectWidth, (playerPosY + 1) * rectWidth, (playerPosX + 1) * rectWidth, (playerPosY)*rectWidth);
-                    matrix[playerPosY][playerPosX] = 'O';
-                    matrix[playerPosY][playerPosX + 1] = 'P';
-
+                if (matrix[playerPosY][playerPosX + 1] == 'O') {// Проверка стены впереди
+                  
+                    playerSide = side[2];
                 }
-                else {
+                if (matrix[playerPosY][playerPosX + 1] == 'X') {// Проверка стены впереди
+
                     playerSide = side[2];
                 }
 
 
             }
-            else {
+            if (matrix[playerPosY + 1][playerPosX] == 'X') {
                 setfillstyle(SOLID_FILL, LIGHTGRAY);
                 bar((playerPosX + 2) * rectWidth, (playerPosY + 1) * rectWidth, (playerPosX + 1) * rectWidth, (playerPosY)*rectWidth);
-                if (matrix[playerPosY][playerPosX + 1] != 'X') {// Проверка стены впереди
-                    if (matrix[playerPosY][playerPosX + 1] != 'X') {// Проверка стены впереди
+                if (matrix[playerPosY][playerPosX + 1] == 'O') {// Проверка стены впереди
+                    if (matrix[playerPosY][playerPosX + 1] == 'O') {// Проверка стены впереди
                         setfillstyle(SOLID_FILL, LIGHTGRAY);
                         bar((playerPosX + 2) * rectWidth, (playerPosY + 1) * rectWidth, (playerPosX + 1) * rectWidth, (playerPosY)*rectWidth);
                         matrix[playerPosY][playerPosX] = 'O';
