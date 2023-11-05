@@ -12,7 +12,7 @@ int main()
 
     char matrix[][10] = {
     {'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X'},
-    {'X', 'O', 'X', 'P', 'O', 'O', 'O', 'O', 'O', 'X'},
+    {'X', 'O', 'X', 'O', 'O', 'O', 'O', 'O', 'P', 'X'},
     {'X', 'O', 'X', 'X', 'X', 'O', 'X', 'X', 'O', 'X'},
     {'X', 'O', 'O', 'O', 'O', 'O', 'X', 'O', 'O', 'X'},
     {'X', 'O', 'X', 'O', 'X', 'O', 'X', 'O', 'X', 'X'},
@@ -25,7 +25,7 @@ int main()
 
     char side[] = { 'T', 'R', 'B', 'L' };
     //       /\    >    \/   <
-    char playerSide = side[3];
+    char playerSide = side[2];
 
 
     int rectWidth = 50;
@@ -67,7 +67,7 @@ int main()
                     bar(j * rectWidth, i * rectWidth, (j + 1) * rectWidth, (i + 1) * rectWidth);
                 }
                 if (firstRender == false) {
-                    //delay(20);
+                    delay(20);
 
                 }
             }
@@ -79,26 +79,28 @@ int main()
 
         printf("POS Y:%d X:%d\n", playerPosY, playerPosX);
         printf("BUKVA %c \n", matrix[playerPosY][playerPosX]);
-        printf("SIDE: %c\n", playerSide);
+        printf("SIDE --> %c\n", playerSide);
+        
+
+        const char SIDE_0 = 'T';
+        const char SIDE_1 = 'R';
+        const char SIDE_2 = 'B';
+        const char SIDE_3 = 'L';
 
 
-        // ИДЕТ ВНИЗ
-        if (playerSide == side[2]) {
-            if (matrix[playerPosY][playerPosX - 1] == 'O') {// Проверка стены правой рукой
+        switch (playerSide) {
+        case SIDE_2:
+            if (matrix[playerPosY][playerPosX - 1] == 'O') {
                 setfillstyle(SOLID_FILL, GREEN);
-                bar((playerPosX - 1) * rectWidth, (playerPosY + 1) * rectWidth, (playerPosX)*rectWidth, (playerPosY)*rectWidth);
-                if (matrix[playerPosY + 1][playerPosX] == 'O') { // Проверка стены впереди
-                    setfillstyle(SOLID_FILL, LIGHTGRAY);
-                    bar(playerPosX * rectWidth, (playerPosY + 1) * rectWidth, (playerPosX + 1) * rectWidth, (playerPosY + 2) * rectWidth);
-                    matrix[playerPosY][playerPosX] = 'O';
-                    matrix[playerPosY + 1][playerPosX] = 'P';
-                }
-                else playerSide = side[1];
+                bar((playerPosX - 1) * rectWidth, (playerPosY + 1) * rectWidth, playerPosX * rectWidth, playerPosY * rectWidth);
+                matrix[playerPosY][playerPosX] = 'O';
+                matrix[playerPosY][playerPosX - 1] = 'P';
+                playerSide = side[1];
             }
             if (matrix[playerPosY][playerPosX - 1] == 'X') {
                 setfillstyle(SOLID_FILL, GREEN);
-                bar((playerPosX - 1) * rectWidth, (playerPosY + 1) * rectWidth, (playerPosX)*rectWidth, (playerPosY)*rectWidth);
-                if (matrix[playerPosY + 1][playerPosX] == 'O') { // Проверка стены впереди
+                bar((playerPosX - 1) * rectWidth, (playerPosY + 1) * rectWidth, playerPosX * rectWidth, playerPosY * rectWidth);
+                if (matrix[playerPosY + 1][playerPosX] == 'O') {
                     setfillstyle(SOLID_FILL, LIGHTGRAY);
                     bar(playerPosX * rectWidth, (playerPosY + 1) * rectWidth, (playerPosX + 1) * rectWidth, (playerPosY + 2) * rectWidth);
                     matrix[playerPosY][playerPosX] = 'O';
@@ -108,44 +110,169 @@ int main()
                     playerSide = side[3];
                 }
             }
-        }
-        // ИДЕТ НАЛЕВО
-        if (playerSide == side[3]) {
-            if (matrix[playerPosY + 1][playerPosX] == 'O') { // Проверка стены правой рукой
+            break;
+
+        case SIDE_3:
+            if (matrix[playerPosY + 1][playerPosX] == 'O') {
                 setfillstyle(SOLID_FILL, LIGHTRED);
                 bar(playerPosX * rectWidth, (playerPosY + 1) * rectWidth, (playerPosX + 1) * rectWidth, (playerPosY + 2) * rectWidth);
-                if (matrix[playerPosY][playerPosX + 1] == 'O') {// Проверка стены впереди
-                  
-                    playerSide = side[2];
-                }
-                if (matrix[playerPosY][playerPosX + 1] == 'X') {// Проверка стены впереди
-
-                    playerSide = side[2];
-                }
-
-
+                playerSide = side[2];
+                matrix[playerPosY][playerPosX] = 'O';
+                matrix[playerPosY + 1][playerPosX] = 'P';
             }
             if (matrix[playerPosY + 1][playerPosX] == 'X') {
-                setfillstyle(SOLID_FILL, LIGHTGRAY);
-                bar((playerPosX + 2) * rectWidth, (playerPosY + 1) * rectWidth, (playerPosX + 1) * rectWidth, (playerPosY)*rectWidth);
-                if (matrix[playerPosY][playerPosX + 1] == 'O') {// Проверка стены впереди
-                    if (matrix[playerPosY][playerPosX + 1] == 'O') {// Проверка стены впереди
-                        setfillstyle(SOLID_FILL, LIGHTGRAY);
-                        bar((playerPosX + 2) * rectWidth, (playerPosY + 1) * rectWidth, (playerPosX + 1) * rectWidth, (playerPosY)*rectWidth);
-                        matrix[playerPosY][playerPosX] = 'O';
-                        matrix[playerPosY][playerPosX + 1] = 'P';
-
-                    }
-                    else playerSide = side[2];
+                setfillstyle(SOLID_FILL, LIGHTRED);
+                bar(playerPosX * rectWidth, (playerPosY + 1) * rectWidth, (playerPosX + 1) * rectWidth, (playerPosY + 2) * rectWidth);
+                if (matrix[playerPosY][playerPosX + 1] == 'O') {
+                    setfillstyle(SOLID_FILL, LIGHTGRAY);
+                    bar((playerPosX + 2) * rectWidth, (playerPosY + 1) * rectWidth, (playerPosX + 1) * rectWidth, playerPosY * rectWidth);
+                    matrix[playerPosY][playerPosX] = 'O';
+                    matrix[playerPosY][playerPosX + 1] = 'P';
                 }
                 else {
                     playerSide = side[0];
-
                 }
             }
+            break;
+
+        case SIDE_1:
+            if (matrix[playerPosY - 1][playerPosX] == 'O') {
+                setfillstyle(SOLID_FILL, LIGHTRED);
+                bar(playerPosX * rectWidth, (playerPosY - 1) * rectWidth, (playerPosX + 1) * rectWidth, playerPosY * rectWidth);
+                playerSide = side[0];
+                matrix[playerPosY][playerPosX] = 'O';
+                matrix[playerPosY - 1][playerPosX] = 'P';
+            }
+            if (matrix[playerPosY - 1][playerPosX] == 'X') {
+                setfillstyle(SOLID_FILL, LIGHTRED);
+                bar(playerPosX * rectWidth, (playerPosY - 1) * rectWidth, (playerPosX + 1) * rectWidth, playerPosY * rectWidth);
+                if (matrix[playerPosY][playerPosX - 1] == 'O') {
+                    setfillstyle(SOLID_FILL, LIGHTGRAY);
+                    bar((playerPosX + 2) * rectWidth, (playerPosY + 1) * rectWidth, (playerPosX + 1) * rectWidth, playerPosY * rectWidth);
+                    matrix[playerPosY][playerPosX] = 'O';
+                    matrix[playerPosY][playerPosX - 1] = 'P';
+                }
+                else {
+                    playerSide = side[2];
+                }
+            }
+            break;
+
+        case SIDE_0:
+            if (matrix[playerPosY][playerPosX + 1] == 'O') {
+                setfillstyle(SOLID_FILL, LIGHTRED);
+                bar((playerPosX + 2) * rectWidth, (playerPosY + 1) * rectWidth, (playerPosX + 1) * rectWidth, playerPosY * rectWidth);
+                playerSide = side[3];
+                matrix[playerPosY][playerPosX] = 'O';
+                matrix[playerPosY][playerPosX + 1] = 'P';
+            }
+            if (matrix[playerPosY][playerPosX + 1] == 'X') {
+                setfillstyle(SOLID_FILL, LIGHTRED);
+                bar(playerPosX * rectWidth, (playerPosY - 1) * rectWidth, (playerPosX + 1) * rectWidth, playerPosY * rectWidth);
+                if (matrix[playerPosY - 1][playerPosX] == 'O') {
+                    setfillstyle(SOLID_FILL, LIGHTGRAY);
+                    bar((playerPosX + 2) * rectWidth, (playerPosY + 1) * rectWidth, (playerPosX + 1) * rectWidth, playerPosY * rectWidth);
+                    matrix[playerPosY][playerPosX] = 'O';
+                    matrix[playerPosY - 1][playerPosX] = 'P';
+                }
+                else {
+                    playerSide = side[1];
+                }
+            }
+            break;
         }
 
 
+        // ИДЕТ НАВЕРХ
+       //  if (playerSide == side[0]) {
+     //        if (matrix[playerPosY][playerPosX + 1] == 'O') { // Проверка стены правой рукой
+      // //           setfillstyle(SOLID_FILL, GREEN);
+       //          bar((playerPosX + 2) * rectWidth, (playerPosY + 1) * rectWidth, (playerPosX + 1) * rectWidth, (playerPosY)*rectWidth);
+     //            if (matrix[playerPosY - 1][playerPosX] == 'O') {// Проверка стены впереди
+      //               setfillstyle(SOLID_FILL, LIGHTGRAY);
+       //              bar(playerPosX * rectWidth, (playerPosY - 1) * rectWidth, (playerPosX + 1) * rectWidth, (playerPosY)*rectWidth);
+       //              matrix[playerPosY][playerPosX] = 'O';
+       //              matrix[playerPosY - 1][playerPosX] = 'P';
+       //              playerSide = side[3];
+        //         }
+        //         if (matrix[playerPosY - 1][playerPosX] == 'X') {// Проверка стены впереди
+         //            setfillstyle(SOLID_FILL, GREEN);
+        //             bar((playerPosX + 2) * rectWidth, (playerPosY + 1) * rectWidth, (playerPosX + 1) * rectWidth, (playerPosY)*rectWidth);
+        //             matrix[playerPosY][playerPosX] = 'O';
+        //             matrix[playerPosY - 1][playerPosX] = 'P';
+        //             playerSide = side[3];
+         //        }
+
+
+        //     }
+       //      if (matrix[playerPosY][playerPosX + 1] == 'X') {
+       //          setfillstyle(SOLID_FILL, LIGHTGRAY);
+       //          bar(playerPosX * rectWidth, (playerPosY - 1) * rectWidth, (playerPosX + 1) * rectWidth, (playerPosY)*rectWidth);
+       //          if (matrix[playerPosY - 1][playerPosX] == 'O') {// Проверка стены впереди
+        //             if (matrix[playerPosY - 1][playerPosX] == 'O') {// Проверка стены впереди
+        //                 setfillstyle(SOLID_FILL, GREEN);
+        //                 bar((playerPosX + 2) * rectWidth, (playerPosY + 1) * rectWidth, (playerPosX + 1) * rectWidth, (playerPosY)*rectWidth);
+        //                 matrix[playerPosY][playerPosX] = 'O';
+        //                 matrix[playerPosY - 1][playerPosX] = 'P';
+        // 
+        //             }
+         //            else playerSide = side[2];
+        //         }
+       //          else {
+            //            playerSide = side[1];
+
+        //         }
+        //     }
+
+       //  }
+
+
+
+
+        // ИДЕТ НАПРАВО
+   //      if (playerSide == side[1]) {
+            //        if (matrix[playerPosY - 1][playerPosX] == 'O') { // Проверка стены правой рукой
+                //          setfillstyle(SOLID_FILL, LIGHTRED);
+                //            bar(playerPosX* rectWidth, (playerPosY - 1)* rectWidth, (playerPosX + 1)* rectWidth, (playerPosY)*rectWidth);
+                //          if (matrix[playerPosY][playerPosX - 1] == 'O') {// Проверка стены впереди
+                    //             setfillstyle(SOLID_FILL, LIGHTGRAY);
+                    //           bar((playerPosX - 1)* rectWidth, (playerPosY + 1)* rectWidth, (playerPosX)*rectWidth, (playerPosY)*rectWidth);
+                    //           matrix[playerPosY][playerPosX] = 'O';
+                    //            matrix[playerPosY ][playerPosX - 1] = 'P';
+                    //             playerSide = side[0];
+                    //         }
+                //         if (matrix[playerPosY][playerPosX + 1] == 'X') {// Проверка стены впереди
+                    //           setfillstyle(SOLID_FILL, LIGHTRED);
+                    //          bar(playerPosX* rectWidth, (playerPosY - 1)* rectWidth, (playerPosX + 1)* rectWidth, (playerPosY)*rectWidth);
+                    //            matrix[playerPosY][playerPosX] = 'O';
+                    //            matrix[playerPosY][playerPosX - 1] = 'P';
+                    //            playerSide = side[0];
+                    //        }
+
+
+                //       }
+            //        if (matrix[playerPosY - 1][playerPosX] == 'X') {
+                //            setfillstyle(SOLID_FILL, LIGHTGRAY);
+                //            bar((playerPosX - 1) * rectWidth, (playerPosY + 1) * rectWidth, (playerPosX ) * rectWidth, (playerPosY)*rectWidth);
+                //            if (matrix[playerPosY][playerPosX - 1] == 'O') {// Проверка стены впереди
+                    //              if (matrix[playerPosY][playerPosX - 1] == 'O') {// Проверка стены впереди
+                        //                 setfillstyle(SOLID_FILL, LIGHTRED);
+                        //                   bar(playerPosX * rectWidth, (playerPosY - 1) * rectWidth, (playerPosX + 1) * rectWidth, (playerPosY ) * rectWidth);
+                        //                   matrix[playerPosY][playerPosX] = 'O';
+                        //                   matrix[playerPosY][playerPosX - 1] = 'P';
+
+                        //           }
+                    //           else playerSide = side[2];
+          //       }
+        //         else {
+           //          playerSide = side[0];
+                    // 
+      //           }
+                //        }
+            //  }
+
+        
+        
         if (isEscaped == true) printf("VICTORY");
         // isEscaped = true;
 
