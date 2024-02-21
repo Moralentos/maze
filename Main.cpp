@@ -35,7 +35,6 @@ int main()
     boolean firstRender = false;
     boolean isEscaped = false;
 
-    // ДОБАВИТЬ ПРОВЕРКУ НИЗ. НЕТ ПОВОРОТА НАПРАВО 
 
 
 
